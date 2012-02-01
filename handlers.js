@@ -40,7 +40,7 @@ function translate(input, letter) {
 }
 
 function start(query, response) {
-	data = {"s": "", "orig": ""};
+	data = {"s": "", "orig": "", "caption": ""};
 	letter = 'A';
 	if (query["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
 		letter = query["l"];
@@ -48,6 +48,7 @@ function start(query, response) {
 	if (query["s"]!= undefined) {
 		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
+		data["caption"] = data["s"].substring(0, 10) + "...";
 	}
 	render_template('index.html', data, response);
 }
