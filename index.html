@@ -16,10 +16,13 @@
 	<script type="text/javascript">
 	$(document).ready(function () {
 		$('#wall').keyup(function() {
-			$.get("garabald", { text: $('#wall').val(), letter: $('#letter').val() },
+			text = $('#wall').val();
+			letter = $('#letter').val();
+			$.get("garabald", { 'text': text, 'letter': letter },
 				function(data) {
 			     	$('#garysays').text(data);
 			}, "json");
+			$('#permalink').attr('href', '?s=' + text + '&l=' + letter);
 		});
 
 	});
@@ -57,6 +60,7 @@
 		</div>
 		<div class="grid-9">
 			<textarea id="wall"><%= orig %></textarea>
+			<a href="#" id="permalink"><h3>share it!</h3></a>
 		</div>
 	</div><!-- /grids -->
 	
