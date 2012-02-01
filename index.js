@@ -4,6 +4,6 @@ var handlers = require("./handlers");
 var handle = {}
 handle["/"] = handlers.start;
 handle["/start"] = handlers.start;
-handle["/upload"] = handlers.upload;
+handle["/serve_static"] = handlers.serve_static;
 
 server.start(server.route, handle);

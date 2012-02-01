@@ -3,13 +3,15 @@ var url = require("url");
 var port = process.env.PORT || 8888;
 
 function route(handle, pathname, query, response) {
-  console.log("About to route a request for " + pathname);
+  console.log("routing request for " + pathname);
   if (typeof handle[pathname] === 'function') {
-      return handle[pathname](query, response);
+      	return handle[pathname](query, response);
+  } else if (typeof handle['/serve_static'] === 'function') {
+      	return handle['/serve_static'](pathname, query, response);
   } else {
-      response.writeHead(404, {"Content-Type": "text/plain"});
-      response.write('Not Found!');
-      response.end();
+        response.writeHead(404, {'Content-Type': 'text/plain'});
+        response.write('404: Not found!');
+      	response.end();
   }
 }
 
@@ -18,7 +20,6 @@ function start(route, handle) {
     var parsed = url.parse(request.url, true);
     var query = parsed.query;
     var pathname = parsed.pathname;
-    console.log("Request for " + pathname + " received");
     route(handle, pathname, query, response);
   }
 
