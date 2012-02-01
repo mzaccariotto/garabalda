@@ -27,12 +27,26 @@ function serve_static(pathname, query, response) {
 }
 
 function start(query, response) {
-	var data = {
-		'title': 'Garabalda'
-	};
-	render_template('index.html', data, response);
+	render_template('index.html', {}, response);
+}
+
+function garabald(query, response) {
+	input = query['text'];
+	letter = query['letter'];
+	vowels = ['a', 'e', 'i', 'o', 'u'];
+	bVowels = ['A', 'E', 'I', 'O', 'U'];
+	for(var v in vowels) {
+		var re = new RegExp(vowels[v], 'g');
+		input = input.replace(re, letter.toLowerCase());
+		var re = new RegExp(bVowels[v], 'g');
+		input = input.replace(re, letter.toUpperCase());
+	}
+	response.writeHead(200, {'Content-Type': 'text/plain'});
+	response.write(JSON.stringify(input));
+	response.end();
 }
 
 
 exports.start = start;
 exports.serve_static = serve_static;
+exports.garabald = garabald;

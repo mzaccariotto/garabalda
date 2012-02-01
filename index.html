@@ -12,10 +12,17 @@
 	<!-- Your extension -->
 	<link rel="stylesheet" href="css/igloos.css" type="text/css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
-
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+	$(document).ready(function () {
+		$('#wall').keyup(function() {
+			$.get("garabald", { text: $('#wall').val(), letter: $('#letter').val() },
+				function(data) {
+			     	$('#garysays').text(data);
+			}, "json");
+		});
 
-
+	});
 	</script>
 </head>
 <body class=wrapper>
@@ -28,9 +35,6 @@
 		</div>
 		<div class="grid-8">
 			<h2 id="garysays">
-				Thanks for choosing inuit.css, your hair looks lovely today&hellip;
-				sdfdsfdsf sdfffffffff dafds dsfdsfd dsfds dfdsf  fdfds dfs
-
 			</h2>
 		</div>		
 		
@@ -58,7 +62,8 @@
 	
 
 	<div class=footer>
-		<p>&copy; Zeta - Powered by Node.js</p>
+		<p>&copy; Zeta - Powered by <a href="http://nodejs.org/">Node.js</a> 
+		on <a href="http://www.heroku.com/">Heroku</a></p>
 	</div>
 	
 </body>
