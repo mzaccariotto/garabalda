@@ -42,7 +42,7 @@ function translate(input, letter) {
 function start(query, response) {
 	data = {"s": "", "orig": "", "caption": ""};
 	letter = "A";
-	if (querey["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
+	if (query["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
 		letter = query["l"];
 	}
 	letter = letter.toUpperCase();
