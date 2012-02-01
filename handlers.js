@@ -40,12 +40,13 @@ function translate(input, letter) {
 }
 
 function start(query, response) {
-	data = {"s": ""};
+	data = {"s": "", "orig": ""};
 	letter = 'A';
 	if (query["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
 		letter = query["l"];
 	}
 	if (query["s"]!= undefined) {
+		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
 	}
 	render_template('index.html', data, response);
