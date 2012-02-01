@@ -50,11 +50,12 @@
 		<div class="grid-1">
 			<div class="styled-select">
 				<select name="letter" id="letter">
-					<option value="A">A</option>
-					<option value="E">E</option>
-					<option value="I">I</option>
-					<option value="O">O</option>
-					<option value="U">U</option>
+					<% 
+						var vowels = ['A', 'E', 'I', 'O', 'U'];
+						for (v in vowels) { %>
+							<option value="<%= vowels[v] %>" <% if (vowels[v] == curr_letter) { %>selected="selected"<% }; %> ><%= vowels[v] %>
+							</option>
+					<% 	}%>
 				</select>
 			</div>
 		</div>

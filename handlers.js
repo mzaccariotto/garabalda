@@ -41,15 +41,17 @@ function translate(input, letter) {
 
 function start(query, response) {
 	data = {"s": "", "orig": "", "caption": ""};
-	letter = 'A';
+	letter = "A";
 	if (query["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
 		letter = query["l"];
 	}
+	letter = letter.toUpperCase();
 	if (query["s"]!= undefined) {
 		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
 		data["caption"] = data["s"].substring(0, 10) + "...";
 	}
+	data["curr_letter"] = letter;
 	render_template('index.html', data, response);
 }
 
