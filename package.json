@@ -1,0 +1,7 @@
+{
+  "name": "garabalda",
+  "version": "0.0.1",
+  "dependencies": {
+    "ejs": "0.6.1"
+  }
+}
