@@ -4,14 +4,21 @@ var port = process.env.PORT || 8888;
 
 function route(handle, pathname, query, response) {
   console.log("routing request for " + pathname);
-  if (typeof handle[pathname] === 'function') {
-      	return handle[pathname](query, response);
-  } else if (typeof handle['/serve_static'] === 'function') {
-      	return handle['/serve_static'](pathname, query, response);
-  } else {
-        response.writeHead(404, {'Content-Type': 'text/plain'});
-        response.write('404: Not found!');
-      	response.end();
+  try {
+	  if (typeof handle[pathname] === 'function') {
+			return handle[pathname](query, response);
+	  } else if (typeof handle['/serve_static'] === 'function') {
+			return handle['/serve_static'](pathname, query, response);
+	  } else {
+			response.writeHead(404, {'Content-Type': 'text/plain'});
+			response.write('404: Not found!');
+			response.end();
+	  }
+  } catch(err){
+		console.log("error " + err);
+		response.writeHead(500, {'Content-Type': 'text/plain'});
+		response.write('Oops! Something went wrong');
+		response.end();
   }
 }
 
