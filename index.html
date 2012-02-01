@@ -22,7 +22,7 @@
 				function(data) {
 			     	$('#garysays').text(data);
 			}, "json");
-			$('#permalink').attr('href', '?s=' + text + '&l=' + letter);
+			$('#permalink').attr('href', '?l=' + letter + '&s=' + text);
 		});
 
 	});
