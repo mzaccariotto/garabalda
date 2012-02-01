@@ -26,23 +26,36 @@ function serve_static(pathname, query, response) {
 	});
 }
 
-function start(query, response) {
-	render_template('index.html', {}, response);
-}
+var vowels = ['a', 'e', 'i', 'o', 'u'];
+var bVowels = ['A', 'E', 'I', 'O', 'U'];
 
-function garabald(query, response) {
-	input = query['text'];
-	letter = query['letter'];
-	vowels = ['a', 'e', 'i', 'o', 'u'];
-	bVowels = ['A', 'E', 'I', 'O', 'U'];
+function translate(input, letter) {
 	for(var v in vowels) {
 		var re = new RegExp(vowels[v], 'g');
 		input = input.replace(re, letter.toLowerCase());
 		var re = new RegExp(bVowels[v], 'g');
 		input = input.replace(re, letter.toUpperCase());
 	}
+	return input;
+}
+
+function start(query, response) {
+	data = {"s": ""};
+	letter = 'A';
+	if (query["l"] != undefined && vowels.concat(bVowels).indexOf(query['l']) != -1) {
+		letter = query["l"];
+	}
+	if (query["s"]!= undefined) {
+		data["s"] = translate(query["s"], letter);
+	}
+	render_template('index.html', data, response);
+}
+
+function garabald(query, response) {
+	input = query['text'];
+	letter = query['letter'];
 	response.writeHead(200, {'Content-Type': 'text/plain'});
-	response.write(JSON.stringify(input));
+	response.write(JSON.stringify(translate(input, letter)));
 	response.end();
 }
 
