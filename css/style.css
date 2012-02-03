@@ -85,6 +85,7 @@ h2#garysays{
 	$FOOTER
 \*------------------------------------*/
 .footer{
+	margin-top: 15px;
 	padding-top:1.5em;
 	border-top:1px solid #ccc;
 	color:#999;
@@ -153,4 +154,28 @@ hr{
    border: 3px solid #aaa;
    background-color: #eee;
    font-family : "Courier New" , Courier , monospace ;
+}
+
+
+
+div#messages {
+	width: 260px;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	height: 100%;
+}
+
+div#messages div.body {
+	overflow: hidden;
+	height: 100px;
+	vertical-align: top;
+	font-size: 13px;
+	color: grey;
+	border-bottom: 1px dotted #ccc;
+	padding: 10px;
+}
+
+div#messages div.body a {
+	color: grey;
 }

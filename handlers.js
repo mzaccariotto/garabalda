@@ -2,6 +2,10 @@ var ejs = require("ejs");
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
+var querystring = require('querystring');
+var redis_url = process.env.REDISTOGO_URL ||  "" ;
+var redis = require('redis-url').createClient(redis_url);
+
 
 function render_template(name, data, response) {
 	var content = fs.readFileSync(name);
@@ -48,6 +52,17 @@ function translate(input, vowel) {
 	return input;
 }
 
+function register_last(letter, text) {
+	redis.llen ('last_messages', function(err, length) {
+	 	if (length > 10) {
+	 		redis.lpop('last_messages');
+	 	}
+	});
+	msg = querystring.stringify({'l': letter, 's': text});
+	redis.lrange ('last_messages', -10, 11, function(err, messages) {
+	 	if (messages.indexOf(msg) == -1) redis.rpush('last_messages', msg);
+	});
+}
 
 function start(query, response) {
 	data = {"s": "", "orig": "", "caption": ""};
@@ -58,6 +73,7 @@ function start(query, response) {
 	}
 	letter = letter.toUpperCase();
 	if (query["s"]!= undefined) {
+		register_last(letter, query["s"]);
 		query["s"] = decodeURIComponent(query["s"]);
 		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
@@ -75,10 +91,26 @@ function garabald(query, response) {
 	response.end();
 }
 
+function messages(query, response) {
+	redis.lrange ('last_messages', -10, 11, function(err, messages) {
+		resp_msg = []
+	 	for (i in messages) {
+	 		query = querystring.parse(messages[i]);
+	 		msg = {'title': translate(query["s"], query["l"]), 'href': '?' + messages[i]}
+	 		resp_msg[i] = msg;
+	 	}
+	 	resp_msg.reverse();
+	 	response.writeHead(200, {'Content-Type': 'text/plain'});
+		response.write(JSON.stringify(resp_msg));
+		response.end();
+	});
+}
+
 
 exports.start = start;
 exports.serve_static = serve_static;
 exports.garabald = garabald;
+exports.messages = messages;
 
 function test_translate() {
 	t = translate('AÁÀÄÂEÉÈËÊIÍÌÏÎOÓÒÖÔUÚÙÜÛaáàäâeéèëêiíìïîoóòöôuúùüû AÁÀÄÂEÉÈËÊIÍÌÏÎOÓÒÖÔUÚÙÜÛaáàäâeéèëêiíìïîoóòöôuúùüû', 'A');
