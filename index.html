@@ -32,7 +32,7 @@
 		hostpath = location.href;
 		if (hostpath.indexOf('?') >= 0) hostpath = hostpath.substring(0, hostpath.indexOf('?'));
 		if (hostpath.indexOf('#') >= 0) hostpath = hostpath.substring(0, hostpath.indexOf('#'));
-		permalink = hostpath + '?l=' + letter + '&s=' + text;
+		permalink = hostpath + '?l=' + letter + '&s=' + text + '&share=true';
 		$('#permalink').attr('href', permalink);
 		$('#social_buttons').hide('fast');
 	}

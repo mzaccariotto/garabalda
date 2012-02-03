@@ -67,6 +67,11 @@ function register_last(letter, text) {
 	});
 }
 
+function redirect(res, url) {
+	res.writeHead(301, {'Location':url, 'Expires': (new Date).toGMTString()});
+    res.end();
+}
+
 function start(query, response) {
 	data = {"s": "", "orig": "", "caption": ""};
 	letter = "A";
@@ -76,7 +81,11 @@ function start(query, response) {
 	}
 	letter = letter.toUpperCase();
 	if (query["s"]!= undefined) {
-		register_last(letter, query["s"]);
+		if (query["share"] != undefined && query["share"] == 'true') {
+			register_last(letter, query["s"]);
+			delete query['share'];
+			redirect(response, 'start?' + querystring.stringify(query));
+		}
 		query["s"] = decodeURIComponent(query["s"]);
 		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
