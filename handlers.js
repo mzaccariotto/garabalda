@@ -1,6 +1,7 @@
 var ejs = require("ejs");
 var fs = require('fs');
 var path = require('path');
+var http = require('http');
 
 function render_template(name, data, response) {
 	var content = fs.readFileSync(name);
@@ -47,14 +48,17 @@ function translate(input, vowel) {
 	return input;
 }
 
+
 function start(query, response) {
 	data = {"s": "", "orig": "", "caption": ""};
 	letter = "A";
 	if (query["l"] != undefined && transform_matrix[query['l'].toUpperCase()] != undefined) {
+		query["l"] = decodeURIComponent(query["l"]);
 		letter = query["l"];
 	}
 	letter = letter.toUpperCase();
 	if (query["s"]!= undefined) {
+		query["s"] = decodeURIComponent(query["s"]);
 		data["orig"] = query["s"];
 		data["s"] = translate(query["s"], letter);
 		data["caption"] = data["s"].substring(0, 20) + "...";
