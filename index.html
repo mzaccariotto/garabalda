@@ -20,7 +20,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
-
+	var current_update = '';
 	var permalink = '';
 	function update_gary() {
 		text = $('#wall').val();
@@ -40,10 +40,19 @@
 	function update_messages() {
 		$.get("messages", {},
 			function(data) {
-				for (m in data) {
-					msg = data[m];
-					$('#messages').append("<div class='body'><a href='" + msg['href'] + "'>" + msg['title'] + "</a></div>");
+				var update = '';
+				for (m in data.msgs) {
+					msg = data.msgs[m];
+					update += "<div id='msg_" + m +"' class='body'><a href='" + msg['href'] + "'>" + msg['title'] + "</a></div>";
 				}
+				if (current_update != data.last_update) {
+					$('#messages').hide();
+					$('#messages').html('');
+					$('#messages').html(update);
+					$('#messages').fadeIn('fast');
+					current_update = data.last_update;
+				}
+				window.setTimeout(update_messages, 2000);
 			}, "json");
 	}
 
@@ -57,7 +66,7 @@
 
 		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 		
-		update_messages();
+		window.setTimeout(update_messages, 2000);
 	});
 	</script>
 	
@@ -130,7 +139,7 @@ alt="godaddy counter"></a></div></noscript>
 					<% } %>
 				</div>
 			</div><!-- /grids -->
-			
+
 			<div class=footer>
 				<p>&copy; zetacode at gmail.com - Powered by <a href="http://nodejs.org/">Node.js</a> 
 				on <a href="http://www.heroku.com/">Heroku</a></p>

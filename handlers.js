@@ -60,7 +60,10 @@ function register_last(letter, text) {
 	});
 	msg = querystring.stringify({'l': letter, 's': text});
 	redis.lrange ('last_messages', -10, 11, function(err, messages) {
-	 	if (messages.indexOf(msg) == -1) redis.rpush('last_messages', msg);
+	 	if (messages.indexOf(msg) == -1) {
+		 	redis.rpush('last_messages', msg);
+		 	redis.set('last_update', new Date().getTime());
+		}
 	});
 }
 
@@ -92,17 +95,19 @@ function garabald(query, response) {
 }
 
 function messages(query, response) {
-	redis.lrange ('last_messages', -10, 11, function(err, messages) {
-		resp_msg = []
-	 	for (i in messages) {
-	 		query = querystring.parse(messages[i]);
-	 		msg = {'title': translate(query["s"], query["l"]), 'href': '?' + messages[i]}
-	 		resp_msg[i] = msg;
-	 	}
-	 	resp_msg.reverse();
-	 	response.writeHead(200, {'Content-Type': 'text/plain'});
-		response.write(JSON.stringify(resp_msg));
-		response.end();
+	redis.get('last_update', function(err, last_update) {
+		redis.lrange ('last_messages', -10, 11, function(err, messages) {
+			resp_msg = []
+		 	for (i in messages) {
+		 		query = querystring.parse(messages[i]);
+		 		msg = {'title': translate(query["s"], query["l"]), 'href': '?' + messages[i]}
+		 		resp_msg[i] = msg;
+		 	}
+		 	resp_msg.reverse();
+		 	response.writeHead(200, {'Content-Type': 'text/plain'});
+			response.write(JSON.stringify({'last_update': last_update, 'msgs': resp_msg }));
+			response.end();
+		});
 	});
 }
 
