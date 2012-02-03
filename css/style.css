@@ -112,6 +112,15 @@ pre mark{
 }
 
 
+a#permalink {
+	font-size: 12px;
+}
+
+#shareButtons *{
+	white-space: nowrap;
+	display: inline;
+}
+
 textarea#wall {
 	width: 100%;
 	height: 100px;
