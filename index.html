@@ -33,7 +33,7 @@
 		if (hostpath.indexOf('?') >= 0) hostpath = hostpath.substring(0, hostpath.indexOf('?'));
 		if (hostpath.indexOf('#') >= 0) hostpath = hostpath.substring(0, hostpath.indexOf('#'));
 		permalink = hostpath + '?l=' + letter + '&s=' + text;
-		$('#permalink').attr('href', permalink);
+		
 		$('#social_buttons').hide('fast');
 	}
 
@@ -45,7 +45,11 @@
 		$('#letter').change(function() {
 			update_gary();
 		});
-
+		$('#permalink').click(function() {
+			$.get("http://tinyurl.com/api-create.php?url=" + permalink, function(data) {
+		     	location.href = data;
+			});
+		});
 		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 		
 	});
