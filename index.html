@@ -23,12 +23,6 @@
 	var current_update = '';
 	var permalink = '';
 
-	function addslashes(str) {
-		str=str.replace(/'/g,"\\'");
-		str=str.replace(/"/g,'\\"');
-		return str;
-	}
-
 	function update_gary() {
 		text = $('#wall').val();
 		letter = $('#letter').val();
@@ -50,7 +44,7 @@
 				var update = '';
 				for (m in data.msgs) {
 					msg = data.msgs[m];
-					update += "<div id='msg_" + m +"' class='body'><a href='" + addslashes(msg['href']) + "'>" + msg['title'] + "</a></div>";
+					update += "<div id='msg_" + m +"' class='body'><a href=\"" + msg['href'] + "\">" + msg['title'] + "</a></div>";
 				}
 				if (current_update != data.last_update) {
 					$('#messages').hide();

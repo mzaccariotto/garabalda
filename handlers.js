@@ -59,6 +59,7 @@ function register_last(letter, text) {
 	 	}
 	});
 	msg = querystring.stringify({'l': letter, 's': text});
+	console.log(msg);
 	redis.lrange ('last_messages', -10, 11, function(err, messages) {
 	 	if (messages.indexOf(msg) == -1) {
 		 	redis.rpush('last_messages', msg);
@@ -102,6 +103,7 @@ function garabald(query, response) {
 	response.write(JSON.stringify(translate(input, letter)));
 	response.end();
 }
+
 
 function messages(query, response) {
 	redis.get('last_update', function(err, last_update) {
